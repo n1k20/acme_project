@@ -1,5 +1,24 @@
 {% extends "base.html" %}
-
+{% load django_bootstrap5 %}
 {% block content %}
+    <div class="card col-4">
+        <div class="card-header">
+            Калькулятор дня рождения
+        </div>
+        <form>
+            {% bootstrap_form form %}
+            {% bootstrap_button button_type='submit' content='Отправить' %}
+        </form>
+        {% with data=request.GET %}
+            {% if form.is_valid %}
+                <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
+                {% if birthday_countdown == 0 %}
+                    Поздравляю с днюхой
+                {% else %}
+                    Тебе осталось {{ birthday_countdown }} дней
+                {% endif %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
 {% endblock %}
