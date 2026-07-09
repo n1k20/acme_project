@@ -14,14 +14,14 @@ class BirthdayForm(forms.ModelForm):
         fields = '__all__'
 
         widgets = {
-            'birthday': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})
-        }
+            'birthday': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})}
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         return first_name.split()[0]
 
     def clean(self):
+        super().clean()
         first_name = self.cleaned_data['first_name']
         last_name = self.cleaned_data['last_name']
         if f'{first_name} {last_name}' in BEATLES:
