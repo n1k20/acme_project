@@ -1,24 +1,52 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+
 {% block content %}
-    <div class="card col-4">
-        <div class="card-header">
-            Калькулятор дня рождения
-        </div>
-        <form>
-            {% bootstrap_form form %}
-            {% bootstrap_button button_type='submit' content='Отправить' %}
-        </form>
-        {% with data=request.GET %}
-            {% if form.is_valid %}
-                <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
-                {% if birthday_countdown == 0 %}
-                    Поздравляю с днюхой
-                {% else %}
-                    Тебе осталось {{ birthday_countdown }} дней
-                {% endif %}
+    {% with data=form.instance %}
+        <h1 class="md-4">
+            {% if '/edit/' in request.path %}
+                <h1> Редактировать запись {{ data.pk }} </h1>
+            {% elif '/delete/' in request.path %}
+                <h1> Удалить запись {{ data.pk }} </h1>
+            {% else %}
+                <h1> Создать запись </h1>
             {% endif %}
-        {% endwith %}
-    </div>
+        </h1>
+        <div class="card col-4">
+            <div class="card-header text-center">
+                Калькулятор ожидания дня рождения
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if not "/delete/" in request.path %}
+                        {% bootstrap_form form %}
+                        <div class="text-muted small mb-3">
+                            ID: новой записи в БД: {{ data.id }}
+                        </div>
+                        <hr>
+                        {% if form.is_valid %}
+                            <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
+                            {% if birthday_countdown == 0 %}
+                                Поздравляю с днюхой
+                            {% else %}
+                                Тебе осталось {{ birthday_countdown }} дней
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <h5 class="card-title md-1"> {{ data.first_name }} {{ data.last_name }} </h5>
+                        <p class="card-text text-muted md-4"> {{ data.birthday }}</p>
+                    {% endif %}
+                    {% bootstrap_button button_type='submit' content='Отправить' button_class='btn-primary w-100' %}
+                </form>
+            </div>
+        </div>
+    {% endwith %}
 
 {% endblock %}
+
+
+
+
+
+

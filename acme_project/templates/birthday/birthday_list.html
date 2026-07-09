@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card my-3">
+        <div class="card-body">
+            {% for birthday in birthdays %}
+                <div class="md-3">
+                    <div class="h5 md-1">
+                        {{ birthday.first_name }} {{ birthday.last_name }} - {{ birthday.birthday }}
+                    </div>
+                    <div>
+                        <a href="{% url 'birthday:edit' birthday.id %}" class="me-2 text-decoration-none">
+                            Изменить запись
+                        </a>
+                        <a href="{% url 'birthday:delete' birthday.id %}" class="text-decoration-none">
+                            Удалить запись
+                        </a>
+                    </div>
+                    {% if not forloop.last %}
+                        <hr class="mt-3">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
